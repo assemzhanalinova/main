@@ -1,0 +1,21 @@
+[tool.poetry]
+name = "flowchart"
+version = "0.1.0"
+description = ""
+authors = ["Kurbanov Rustam <rustam.95.ur@gmail.com>"]
+
+[tool.poetry.dependencies]
+python = "^3.10"
+Django = "^4.1.7"
+gunicorn = "^20.1.0"
+psycopg2-binary = "^2.9.5"
+Pillow = "^9.4.0"
+pydantic = "^1.10.7"
+djangorestframework = "^3.14.0"
+drf-yasg = "^1.21.5"
+
+[tool.poetry.dev-dependencies]
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"

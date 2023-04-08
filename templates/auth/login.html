@@ -1,0 +1,62 @@
+{% extends "layouts/app.html" %}
+{% load static %}
+{% load i18n %}
+{% block title %} {% trans 'Login' %} {% endblock %}
+{% block body_class %} blank-page  {% endblock %}
+{% block css %}
+    <link rel="stylesheet" type="text/css"
+          href="{% static 'css/pages/authentication.css' %}">
+{% endblock %}
+{% block content %}
+
+    <!-- BEGIN: Content-->
+    <div class="app-content content ">
+        <div class="content-overlay"></div>
+        <div class="header-navbar-shadow"></div>
+        <div class="content-wrapper">
+            <div class="content-header row">
+            </div>
+            <div class="content-body">
+                <div class="auth-wrapper auth-cover">
+                    <div class="auth-inner row m-0">
+                        <!-- Brand logo-->
+                        <a class="brand-logo" href="{% url 'home' %}">
+                            <img alt="logo"
+                                 src="{% static 'images/logo.png' %}"
+                                 style="max-width: 200px;">
+                        </a>
+                        <!-- /Brand logo-->
+                        <!-- Left Text-->
+                        <div class="d-none d-lg-flex col-lg-8 align-items-center p-5">
+                            <div class="w-100 d-lg-flex align-items-center justify-content-center px-5">
+                                <img class="img-fluid"
+                                     src="{% static 'images/pages/login-v2.svg' %}"
+                                     alt="Login V2"/></div>
+                        </div>
+                        <!-- /Left Text-->
+                        <!-- Login-->
+                        <div class="d-flex col-lg-4 align-items-center auth-bg px-2 p-lg-5">
+                            <div class="col-12 col-sm-8 col-md-6 col-lg-12 px-xl-2 mx-auto">
+                                <h2 class="card-title fw-bold mb-1">
+                                    {% trans "Welcome to FlowChart" %}
+                                </h2>
+                                <form class="auth-login-form mt-2"
+                                      id="phone_form"
+                                      action="" method="POST">
+                                    {% csrf_token %}
+                                    {{ form.as_p }}
+                                    <button class="btn btn-primary w-100"
+                                            tabindex="4">
+                                        {% trans 'Sign in' %}
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                        <!-- /Login-->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- END: Content-->
+{% endblock %}

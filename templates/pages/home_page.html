@@ -1,0 +1,49 @@
+{% extends "layouts/app.html" %}
+{% load static %}
+{% load i18n %}
+{% block title %} {% trans 'Home' %} {% endblock %}
+{% block css %}
+<script type="text/javascript"
+        src="{% static 'common/data.js' %}?v=5.0.1"></script>
+<script type="text/javascript"
+        src="{% static 'codebase/diagramWithEditor.js' %}?v=5.0.1"></script>
+<link rel="stylesheet"
+      href="{% static 'codebase/diagramWithEditor.css' %}?v=5.0.1">
+
+<style>
+    .dhx_diagram {
+        background: #fff;
+    }
+
+    .dhx_sample-widget {
+        height: calc(100% - 61px);
+    }
+</style>
+{% endblock %}
+{% block content %}
+    <div class="app-content content ">
+        <div class="content-overlay"></div>
+        <div class="header-navbar-shadow"></div>
+        <div class="content-wrapper container-fluid p-0">
+            <div class="content-header row">
+            </div>
+            <div class="content-body">
+                <section style="height: 120rem; width: 100%;">
+                    <div class="dhx_sample-widget" id="editor"></div>
+                </section>
+            </div>
+        </div>
+    </div>
+<script>
+    const editor = new dhx.DiagramEditor("editor", {
+        type: "default",
+        autoplacement: {
+            mode: "direct",
+        }
+    });
+
+    editor.parse(auto_place_data);
+</script>
+{% endblock %}
+{% block js %}
+{% endblock %}>

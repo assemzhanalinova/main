@@ -1,0 +1,165 @@
+{% extends "layouts/app.html" %}
+{% load static %}
+{% load i18n %}
+{% block title %} {% trans 'Home' %} {% endblock %}
+
+{% block vendor_css %}
+<link rel="stylesheet" type="text/css"
+      href="{% static 'vendors/css/tables/datatable/dataTables.bootstrap5.min.css' %}">
+<link rel="stylesheet" type="text/css"
+      href="{% static 'vendors/css/tables/datatable/responsive.bootstrap5.min.css' %}">
+<link rel="stylesheet" type="text/css"
+      href="{% static 'vendors/css/tables/datatable/buttons.bootstrap5.min.css' %}">
+{% endblock %}
+
+{% block css %}
+{% endblock %}
+
+{% block content %}
+<!-- BEGIN: Content-->
+<div class="app-content content ">
+    <div class="content-overlay"></div>
+    <div class="header-navbar-shadow"></div>
+    <div class="content-wrapper container-xxl p-0">
+        <div class="content-header row">
+            <div class="content-header-left col-md-9 col-12 mb-2">
+                <div class="row breadcrumbs-top">
+                    <div class="col-12">
+                        <h2 class="content-header-title float-start mb-0">
+                            {% trans 'Business Process' %}
+                        </h2>
+                        <div class="breadcrumb-wrapper">
+                            <ol class="breadcrumb">
+                                <li class="breadcrumb-item">
+                                    <a href="{% url 'home' %}">
+                                        {% trans 'Home' %}
+                                    </a>
+                                </li>
+                                <li class="breadcrumb-item active">
+                                    {% trans 'Business Process' %}
+                                </li>
+                            </ol>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% if is_can_add %}
+            <div class="content-header-right text-md-end col-md-3 col-12 d-md-block d-none">
+                <div class="mb-1 breadcrumb-right">
+                    <div class="dropdown">
+                        <a class="btn btn-primary waves-effect waves-float waves-light"
+                           href="{% url 'business_process_create' %}">
+                            {% trans "Add" %}
+                        </a>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+        <div class="content-body">
+            <!-- Advanced Search -->
+            <section id="category-datatable">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="card">
+                            <table class="datatables-data table">
+                                <thead>
+                                <tr>
+                                    <th></th>
+                                    <th>{% trans 'Title'%}</th>
+                                    <th>{% trans 'Author'%}</th>
+                                    <th>{% trans 'Status'%}</th>
+                                    <th></th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {% for object in object_list %}
+                                <tr>
+                                    <td></td>
+                                    <td>{{object.title}}</td>
+                                    <td>{{object.author.full_name}}</td>
+                                    <td>{% trans object.get_status_display %}
+                                    </td>
+                                    <td>
+                                        <a class="btn-primary btn"
+                                           href="{% url 'as_is_business_process_diagram' object.id %}">
+                                            {% trans 'Diagram AS IS' %}
+                                        </a>
+                                        <a class="btn-info btn"
+                                           href="{% url 'to_be_list' object.id %}">
+                                            {% trans 'To Be list' %}
+                                        </a>
+                                        {% if object.author == request.user %}
+                                        <a class="btn-warning btn"
+                                           href="{% url 'as_is_business_process_edit' object.id %}">
+                                            {% trans 'Edit title' %}
+                                        </a>
+                                        <form action="{% url  'as_is_business_process_diagram_delete' object.id  %}"
+                                              id="form-{{object.id}}"
+                                              method="post"
+                                        >
+                                            {% csrf_token %}
+                                            <button class="btn btn-danger delete_icon mt-1"
+                                                    onclick="deleteConfirm('{{object.id}}')"
+                                                    type="button">
+                                                {% trans 'Delete' %}
+                                            </button>
+                                        </form>
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <!--/ Advanced Search -->
+        </div>
+    </div>
+</div>
+<!-- END: Content-->
+{% endblock %}
+
+{% block vendor_js %}
+<script src="{% static 'vendors/js/tables/datatable/jquery.dataTables.min.js' %}"></script>
+<script src="{% static 'vendors/js/tables/datatable/dataTables.bootstrap5.min.js' %}"></script>
+<script src="{% static 'vendors/js/tables/datatable/dataTables.responsive.min.js' %}"></script>
+<script src="{% static 'vendors/js/tables/datatable/responsive.bootstrap5.js' %}"></script>
+<script src="{% static 'vendors/js/tables/datatable/dataTables.buttons.min.js' %}"></script>
+{% endblock %}>
+
+{% block js %}
+{% block data_table_column %} {% endblock %}
+<script>
+    let table_column = [
+        {data: 'id'},
+        {data: 'title'},
+        {data: 'author'},
+        {data: 'status'},
+        {data: ''}
+    ]
+
+    function deleteConfirm(form_id) {
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "You won't be able to revert this!",
+            icon: 'warning',
+            showCancelButton: false,
+            confirmButtonText: 'Yes, delete it!',
+            customClass: {
+                confirmButton: 'btn btn-primary',
+            },
+            buttonsStyling: false
+        }).then(function (result) {
+            if (result.value) {
+                document.getElementById('form-' + form_id).submit();
+            }
+        });
+    }
+</script>
+<script src="{% static 'js/scripts/pages/data_table_page.js' %}"></script>
+{% endblock %}>
+
+

@@ -1,0 +1,135 @@
+{% extends "layouts/app.html" %}
+{% load static %}
+{% load i18n %}
+{% block title %} {% trans 'Diagram' %} {% endblock %}
+{% block css %}
+<script type="text/javascript"
+        src="{% static 'common/data.js' %}?v=5.0.1"></script>
+<script type="text/javascript"
+        src="{% static 'codebase/diagramWithEditor.js' %}?v=5.0.1"></script>
+<link rel="stylesheet"
+      href="{% static 'codebase/diagramWithEditor.css' %}?v=5.0.1">
+
+<style>
+    html, body, .dhx_diagram {
+        background: #fff;
+    }
+
+    .dhx_sample-container__without-editor {
+        height: calc(100% - 121px);
+    }
+
+    .dhx_sample-widget {
+        height: 100%;
+    }
+
+
+</style>
+
+{% endblock %}
+{% block content %}
+<div class="app-content content ">
+    <div class="content-overlay"></div>
+    <div class="header-navbar-shadow"></div>
+    <div class="content-wrapper container-fluid p-0">
+        <div class="content-header row">
+            <input type="hidden" name="as_is_object_id" id="as_is_object_id"
+                   value="{{object_as_is.id}}">
+            {% if object_to_be %}
+            <input type="hidden" name="to_be_object_id" id="to_be_object_id"
+                   value="{{object_to_be.id}}">
+            {% endif %}
+            <div class="content-header-left col-md-9 col-12 mb-2">
+                <div class="row breadcrumbs-top">
+                    <div class="col-12">
+                        <h2 class="content-header-title float-start mb-0">
+                            {% trans 'Business process diagram' %}
+                        </h2>
+                        <div class="breadcrumb-wrapper">
+                            <ol class="breadcrumb">
+                                <li class="breadcrumb-item">
+                                    <a href="{% url 'home' %}">
+                                        {% trans 'Business process list' %}
+                                    </a>
+                                </li>
+                                <li class="breadcrumb-item active">
+                                    {{ object_as_is.title }}
+                                </li>
+                            </ol>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="content-body">
+            <section id="container-as-is"
+                     class="dhx_sample-container__without-editor">
+                <h4>{% trans 'Status' %}: <b class="text-primary">
+                    {% trans object_as_is.get_status_display %}</b>
+                </h4>
+                <h4>{% trans 'Author' %}: <b class="text-primary">
+                    {% trans object_as_is.author.full_name %}</b>
+                </h4>
+                <form id="as_is_change_status"
+                      action="{% url 'as_is_business_process_change_status' object_as_is.id %}"
+                      method="post">
+                    {% csrf_token %}
+                </form>
+                {% for btn in as_is_buttons %}
+                    {{btn|safe}}
+                {% endfor %}
+                <h2 class="text-center"><b>AS IS </b></h2>
+                <div class="dhx_sample-widget" id="diagram-as-is"></div>
+            </section>
+            <section id="container-to-be"
+                     class="dhx_sample-container__without-editor mt-2">
+                <h4>{% trans 'Status' %}: <b class="text-primary">
+                    {% trans object_to_be.get_status_display %}</b>
+                </h4>
+                <h4>{% trans 'Author' %}: <b class="text-primary">
+                    {% trans object_to_be.author.full_name %}</b>
+                </h4>
+                {% if object_to_be %}
+                <form id="to_be_change_status"
+                      action="{% url 'to_be_business_process_change_status' object_to_be.id %}"
+                      method="post">
+                    {% csrf_token %}
+                </form>
+
+                {% endif %}
+                {% for btn in to_be_buttons %}
+                    {{btn|safe}}
+                {% endfor %}
+
+                <h2 class="text-center"><b>TO-BE </b></h2>
+                <div class="dhx_sample-widget" id="diagram-to-be"></div>
+            </section>
+        </div>
+    </div>
+</div>
+<script>
+
+    const diagram_as_is = new dhx.Diagram("diagram-as-is", {
+        type: "org",
+        defaultShapeType: "template"
+    });
+
+    let as_is_object_id = document.getElementById("as_is_object_id").value
+    let url = "/api/v1/business_processes/as-is/" + as_is_object_id
+    diagram_as_is.data.load(url);
+
+    const diagram_to_be = new dhx.Diagram("diagram-to-be", {
+        type: "org",
+        defaultShapeType: "template"
+    });
+    let to_be_object_id = document.getElementById("to_be_object_id").value
+    if (to_be_object_id) {
+        let to_be_url = "/api/v1/business_processes/to-be/" + to_be_object_id
+        diagram_to_be.data.load(to_be_url);
+    }
+
+
+</script>
+{% endblock %}
+{% block js %}
+{% endblock %}>

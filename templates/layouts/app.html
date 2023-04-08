@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html class="loading" lang="en" data-textdirection="ltr">
+<!-- BEGIN: Head-->
+{% load i18n %}
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport"
+          content="width=device-width,initial-scale=1.0,user-scalable=0,minimal-ui">
+    <meta name="description"
+          content="">
+    <meta name="keywords"
+          content="">
+    <title>{% block title %} {% endblock %}</title>
+    {% load static %}
+    <meta name="theme-color" content="#ffffff">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,300;0,400;0,500;0,600;1,400;1,500;1,600"
+          rel="stylesheet">
+
+    <!-- BEGIN: Vendor CSS-->
+    <link rel="stylesheet" type="text/css"
+          href="{% static 'vendors/css/vendors.min.css' %}">
+     {% block vendor_css %} {% endblock %}
+    <!-- END: Vendor CSS-->
+
+    <!-- BEGIN: Theme CSS-->
+    <link rel="stylesheet" type="text/css"
+          href="{% static 'css/bootstrap.css' %}">
+    <link rel="stylesheet" type="text/css"
+          href="{% static 'css/bootstrap-extended.css' %}">
+    <link rel="stylesheet" type="text/css"
+          href="{% static 'css/colors.css' %}">
+    <link rel="stylesheet" type="text/css"
+          href="{% static 'css/components.css' %}">
+    <link rel="stylesheet" type="text/css"
+          href="{% static 'css/themes/dark-layout.css' %}">
+    <link rel="stylesheet" type="text/css"
+          href="{% static 'css/themes/bordered-layout.css' %}">
+    <link rel="stylesheet" type="text/css"
+          href="{% static 'css/themes/semi-dark-layout.css' %}">
+
+    <!-- BEGIN: Page CSS-->
+    <link rel="stylesheet" type="text/css"
+          href="{% static 'css/core/menu/menu-types/horizontal-menu.css' %}">
+    {% block css %} {% endblock %}
+       <!-- END: Page CSS-->
+
+    <!-- BEGIN: Custom CSS-->
+    <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
+
+    <!-- END: Custom CSS-->
+
+</head>
+<!-- END: Head-->
+<body class="horizontal-layout horizontal-menu navbar-floating footer-static {% block body_class %} {% endblock %}"
+      data-open="click" data-menu="vertical-menu-modern" data-col="blank-page">
+<!-- BEGIN: Body-->
+
+{% if request.resolver_match.url_name != 'login' %}
+    {% include "layouts/header.html" %}
+{% endif %}
+{% block content %}{% endblock %}
+<div class="sidenav-overlay"></div>
+<div class="drag-target"></div>
+<!-- END: Body-->
+<!-- BEGIN: Vendor JS-->
+<script src="{% static 'vendors/js/vendors.min.js' %}"></script>
+<!-- BEGIN Vendor JS-->
+
+<!-- BEGIN: Page Vendor JS-->
+<script src="{% static 'vendors/js/extensions/moment.min.js' %}"></script>
+<script src="{% static 'vendors/js/forms/validation/jquery.validate.min.js' %}"></script>
+<script src="{% static 'vendors/js/extensions/sweetalert2.all.min.js' %}"></script>
+{% block vendor_js %} {% endblock %}
+<!-- END: Page Vendor JS-->
+
+<!-- BEGIN: Theme JS-->
+<script src="{% static 'js/core/app-menu.js' %}"></script>
+<script src="{% static 'js/core/app.js' %}"></script>
+<!-- END: Theme JS-->
+
+<!-- BEGIN: Page JS-->
+{% block js %} {% endblock %}
+<!-- END: Page JS-->
+
+<script>
+    $(window).on('load', function () {
+        if (feather) {
+            feather.replace({
+                width: 14,
+                height: 14
+            });
+        }
+    })
+    {% if messages %}
+    {% for message in messages %}
+    {% if message.tags == 'validate' or message.tags == "error" %}
+    Swal.fire({
+        title: '{% trans message.tags|title %}!',
+        html: '{{ message|escape  }}',
+        icon: 'error',
+        customClass: {
+            confirmButton: 'btn btn-primary'
+        },
+        buttonsStyling: false
+    });
+    {% else %}
+    Swal.fire({
+        title: '{{ message.tags|title }}!',
+        text: '{{ message|escape }}',
+        icon: '{{ message.tags }}',
+        customClass: {
+            confirmButton: 'btn btn-primary'
+        },
+        buttonsStyling: false
+    });
+    {% endif %}
+    {% endfor %}
+    {% endif %}
+</script>
+</body>
+</html>

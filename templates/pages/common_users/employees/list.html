@@ -1,0 +1,105 @@
+{% extends "layouts/app.html" %}
+{% load static %}
+{% load i18n %}
+{% block title %} {% trans 'Employees' %} {% endblock %}
+
+{% block vendor_css %}
+<link rel="stylesheet" type="text/css"
+      href="{% static 'vendors/css/tables/datatable/dataTables.bootstrap5.min.css' %}">
+<link rel="stylesheet" type="text/css"
+      href="{% static 'vendors/css/tables/datatable/responsive.bootstrap5.min.css' %}">
+<link rel="stylesheet" type="text/css"
+      href="{% static 'vendors/css/tables/datatable/buttons.bootstrap5.min.css' %}">
+{% endblock %}
+
+{% block css %}
+{% endblock %}
+
+{% block content %}
+<!-- BEGIN: Content-->
+<div class="app-content content ">
+    <div class="content-overlay"></div>
+    <div class="header-navbar-shadow"></div>
+    <div class="content-wrapper container-xxl p-0">
+        <div class="content-header row">
+            <div class="content-header-left col-md-9 col-12 mb-2">
+                <div class="row breadcrumbs-top">
+                    <div class="col-12">
+                        <h2 class="content-header-title float-start mb-0">
+                            {% trans 'Employees' %}
+                        </h2>
+                        <div class="breadcrumb-wrapper">
+                            <ol class="breadcrumb">
+                                <li class="breadcrumb-item">
+                                    <a href="{% url 'home' %}">
+                                        {% trans 'Home' %}
+                                    </a>
+                                </li>
+                                <li class="breadcrumb-item active">
+                                    {% trans 'Employees' %}
+                                </li>
+                            </ol>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="content-body">
+            <!-- Advanced Search -->
+            <section id="category-datatable">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="card">
+                            <table class="datatables-data table">
+                                <thead>
+                                <tr>
+                                    <th></th>
+                                    <th>{% trans 'Fist name'%}</th>
+                                    <th>{% trans 'Last name'%}</th>
+                                    <th>{% trans 'Email'%}</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {% for object in object_list %}
+                                <tr>
+                                    <td></td>
+                                    <td>{{object.first_name}}</td>
+                                    <td>{{object.last_name}}</td>
+                                    <td>{{object.email}}</td>
+                                </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <!--/ Advanced Search -->
+        </div>
+    </div>
+</div>
+<!-- END: Content-->
+{% endblock %}
+
+{% block vendor_js %}
+<script src="{% static 'vendors/js/tables/datatable/jquery.dataTables.min.js' %}"></script>
+<script src="{% static 'vendors/js/tables/datatable/dataTables.bootstrap5.min.js' %}"></script>
+<script src="{% static 'vendors/js/tables/datatable/dataTables.responsive.min.js' %}"></script>
+<script src="{% static 'vendors/js/tables/datatable/responsive.bootstrap5.js' %}"></script>
+<script src="{% static 'vendors/js/tables/datatable/dataTables.buttons.min.js' %}"></script>
+{% endblock %}>
+
+{% block js %}
+{% block data_table_column %} {% endblock %}
+<script>
+    let table_column = [
+        {data: 'id'},
+        {data: 'first_name'},
+        {data: 'last_name'},
+        {data: 'email'},
+    ]
+</script>
+<script src="{% static 'js/scripts/pages/data_table_page.js' %}"></script>
+{% endblock %}>
+
+
